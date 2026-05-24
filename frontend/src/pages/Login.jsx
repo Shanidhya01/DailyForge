@@ -184,16 +184,12 @@ const Login = () => {
     try {
       
 
-      await api.post("/auth/login", {
+      const { data } = await api.post("/auth/login", {
         email,
         password,
       });
 
-      const me = await api.get(
-        "/auth/me"
-      );
-
-      setUser(me.data.user);
+      setUser(data.user);
 
       navigate(redirectPath, {
         replace: true,

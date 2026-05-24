@@ -8,7 +8,7 @@ export const authMiddleware = (req, res, next) => {
   if (!token) {
     return res
       .status(401)
-      .json({ success: false, message: "Token format invalid" });
+      .json({ success: false, message: "Authentication required" });
   }
 
   // check JWT_SECRET is configured
