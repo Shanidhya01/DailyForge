@@ -33,7 +33,7 @@ const Login = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [totpCode, setTotpCode] = useState("");
-  const [tempUserId, setTempUserId] = useState(null);
+  const [tempUserId, _setTempUserId] = useState(null);
 
   // useNavigate object
   const navigate = useNavigate();
@@ -100,89 +100,6 @@ const Login = () => {
       navigate(redirectPath, {
         replace: true,
       });
-      const res = await api.post("/auth/login", {
-        email,
-        password,
-      });
-      console.log("Login success: ", res.data);
-
-      // Animate the button to fill the screen
-      if (buttonRef.current) {
-        const btn = buttonRef.current;
-        const rect = btn.getBoundingClientRect();
-        
-        // Calculate center of the button
-        const size = 10;
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-
-        const overlay = document.createElement("div");
-        overlay.style.position = "fixed";
-        overlay.style.top = `${centerY - size / 2}px`;
-        overlay.style.left = `${centerX - size / 2}px`;
-        overlay.style.width = `${size}px`;
-        overlay.style.height = `${size}px`;
-        overlay.style.backgroundColor = window.getComputedStyle(btn).backgroundColor;
-        overlay.style.borderRadius = "50%";
-        overlay.style.zIndex = "9999";
-        overlay.style.transformOrigin = "center center";
-        
-        const textEl = document.createElement("div");
-        textEl.innerText = "Logging in..";
-        textEl.style.position = "fixed";
-        textEl.style.top = "50%";
-        textEl.style.left = "50%";
-        textEl.style.transform = "translate(-50%, -50%)";
-        textEl.style.color = window.getComputedStyle(btn).color;
-        textEl.style.fontSize = "1.5rem";
-        textEl.style.fontWeight = "bold";
-        textEl.style.zIndex = "10000";
-        textEl.style.opacity = "0";
-        textEl.style.fontFamily = window.getComputedStyle(btn).fontFamily;
-
-        document.body.appendChild(overlay);
-        document.body.appendChild(textEl);
-        // Don't hide the button, let the bubble swallow it
-        // Calculate max scale to cover the screen
-        const maxDistX = Math.max(centerX, window.innerWidth - centerX);
-        const maxDistY = Math.max(centerY, window.innerHeight - centerY);
-        const maxRadius = Math.sqrt(maxDistX * maxDistX + maxDistY * maxDistY);
-        const scale = (maxRadius * 2) / size;
-
-        const tl = gsap.timeline({
-          onComplete: () => {
-            overlay.remove();
-            textEl.remove();
-            if (res.data.user) {
-              setUser(res.data.user);
-            }
-            navigate(redirectPath, { replace: true });
-          }
-        });
-
-        tl.to(overlay, {
-          scale: scale,
-          duration: 0.8,
-          ease: "power2.inOut",
-        })
-        .to(textEl, {
-          opacity: 1,
-          duration: 0.3,
-          ease: "power2.out"
-        })
-        .to(textEl, {
-          opacity: 1,
-          duration: 1.5
-        });
-      } else {
-        if (res.data.user) {
-          setUser(res.data.user);
-        }
-        navigate(redirectPath, { replace: true });
-      }
-      const me = await api.get("/auth/me");
-      setUser(me.data.user);
-      navigate(redirectPath, { replace: true });
     } catch (error) {
       setError(error.response?.data?.message || "Invalid email or password.");
     } finally {
