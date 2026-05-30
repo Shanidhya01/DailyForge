@@ -33,7 +33,7 @@ const Login = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [totpCode, setTotpCode] = useState("");
-  const [tempUserId, _setTempUserId] = useState(null);
+  const [tempUserId, setTempUserId] = useState(null);
 
   // useNavigate object
   const navigate = useNavigate();
